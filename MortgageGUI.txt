@@ -1,0 +1,129 @@
+/*
+Programmer: Joselyne Guillen
+File Name: MortgageGui.java 
+Date: 11/02/20
+Version: 1.4
+Explanation of Program: 
+This program helps the user calculate their monthly mortgage payments
+using a GUI. A GUI is created that shows a window prompting
+the user to input loan, rate, and term. In the window, there 
+are three buttons; calculate, reset, and exit. The calculate 
+button calculates the monthly payment with the information the user
+entered if clicked. The reset button allows the user to go back and
+enter new data if clicked. The exit button exits the program if clicked.
+The inputs and outputs are all displayed in the window.
+*/
+import javax.swing.*;//import packages for GUI
+import java.awt.*;
+import java.awt.event.*;
+import java.text.DecimalFormat;//import package to set specific decimals
+public class MortgageGui extends JFrame implements ActionListener//class MortgageGui inherits from JFrame
+{
+    FlowLayout flow = new FlowLayout();//create object from class FlowLayout to set GUI components from left to right and top to bottom
+   
+    JLabel mortPayment = new JLabel("Mortgage:     ");//create label from class JLabel
+    JTextField mor = new JTextField(10);//create text box from class JTextField
+    
+    JLabel term = new JLabel("Term for Mortgage:   ");
+    JTextField t = new JTextField(6);
+    
+    JLabel rate = new JLabel("Rate for Mortgage:    ");
+    JTextField r = new JTextField(6);
+    
+    JButton calcMortB = new JButton("Calculate");//create buttons from class JButton
+    JButton resetB = new JButton("Reset");
+    JButton exitB = new JButton("Exit");
+    
+    JLabel blankSpace2 = new JLabel("                       ");//create blank label for spacing purposes
+     
+    JLabel monthlyPay = new JLabel("The monthly payment is:    ");
+    JLabel pay = new JLabel("");//create label to display result of monthly payment
+    
+    public MortgageGui()//default constructor
+    {
+        Container con = getContentPane();//create container from class Container
+        
+        con.setLayout(flow); //components in row
+        
+        con.add(mortPayment);//add labels and text boxes to container
+        con.add(mor);
+        
+        con.add(term);
+        con.add(t);
+        
+        con.add(rate);
+        con.add(r);
+              
+        con.add(monthlyPay);
+        con.add(pay);
+        con.add(blankSpace2); 
+        con.add(calcMortB);//add buttons to container
+        
+        con.add(resetB);
+        con.add(exitB);
+        
+        calcMortB.addActionListener(this);//adds actions behind the buttons
+        resetB.addActionListener(this);
+        exitB.addActionListener(this);
+    }
+    
+    public static void main (String [] args)//driver for class
+    {
+        MortgageGui mortG = new MortgageGui();//create object of class MortgageGui
+        
+        mortG.setTitle("Calculate Monthly Payment"); //gives the window a title
+        mortG.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //closes window on close
+        mortG.setSize(332, 332); //sets window dimension
+        mortG.setVisible(true); //see window on screen
+    }
+    
+    public void actionPerformed(ActionEvent e)//method to code user actions
+    {
+        Object source = e.getSource();//create object from class Object
+        
+        if (source == calcMortB)//if user clicks calculate button
+        {
+            String m = mor.getText();//gets user input
+            String te = t.getText();
+            String ra = r.getText();
+            
+            float mg = Float.parseFloat(m);//converts user input from string to float, int, and double
+            int tm = Integer.parseInt(te);
+            double rt = Double.parseDouble(ra);
+            
+            double monthlyPayment = 0; //initializes monthly payment
+            tm = tm *12; //converts term in years to term in months
+            rt = rt/1200.0;//converts yearly interest rate to monthly interest rate
+            
+            monthlyPayment = (mg*rt)/(1.0-Math.pow(rt+1,-tm));//calculates monthly payment
+            DecimalFormat df = new DecimalFormat("0.00"); //sets monthly payment to two decimal places
+            double deciMP = Double.valueOf(df.format(monthlyPayment));
+            String output = "" + deciMP; //converts data type of monthly payment to string
+            pay.setText(output); //displays monthly payment
+              
+        }
+        
+        else if(source == resetB)//if user clicks reset button
+        {
+            
+                pay.setText("");//empties the text/input
+                mor.setText("");
+                t.setText("");
+                r.setText("");
+            
+        }
+        
+        else if (source == exitB)//if user clicks exit button
+        {
+            System.exit(0);//program exits
+            
+        }
+        
+        else
+        {
+            //do nothing
+        }
+        
+    }// end actionPerformed
+       
+}// end class MortgageGui
